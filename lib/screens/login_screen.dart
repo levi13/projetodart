@@ -29,7 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Login realizado com sucesso!')),
         );
-        // TODO: Navegar para a dashboard
+        // Após o login, abre o menu (Drawer)
+        _openDrawer();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('E-mail ou senha incorretos')),
@@ -52,11 +53,56 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  // Função para abrir o Drawer
+  void _openDrawer() {
+    Scaffold.of(context).openDrawer();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(_isLogin ? 'Login' : 'Cadastro'),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            const DrawerHeader(
+              child: Text('App Saúde'),
+              decoration: BoxDecoration(
+                color: Colors.green,
+              ),
+            ),
+            ListTile(
+              title: const Text('IMC'),
+              onTap: () {
+                Navigator.pushNamed(context, '/imc');
+              },
+            ),
+            ListTile(
+              title: const Text('Cadastrar Administrador'),
+              onTap: () {
+                Navigator.pushNamed(context, '/cadastro');
+              },
+            ),
+             ListTile(
+              leading: const Icon(Icons.restaurant_menu),
+              title: const Text('Refeições'),
+              onTap: () {
+                Navigator.pushNamed(context, '/refeicoes');
+              },
+            ),ListTile(
+                leading: const Icon(Icons.fitness_center),
+                title: const Text('Atividades Físicas'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/atividades');
+                },
+            ),
+
+            // Adicione mais itens de navegação aqui
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -65,20 +111,20 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'E-mail'),
+                decoration: const InputDecoration(labelText: 'E-mail'),
                 keyboardType: TextInputType.emailAddress,
                 validator: (val) =>
                     val!.isEmpty ? 'Informe seu e-mail' : null,
                 onSaved: (val) => _email = val!,
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Senha'),
+                decoration: const InputDecoration(labelText: 'Senha'),
                 obscureText: true,
                 validator: (val) =>
                     val!.isEmpty ? 'Informe sua senha' : null,
                 onSaved: (val) => _senha = val!,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
